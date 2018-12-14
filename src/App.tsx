@@ -1,14 +1,22 @@
 import * as React from 'react';
-import { Hello } from "./Hello";
 import { hot } from 'react-hot-loader'
-import Button from '@material-ui/core/Button';
+import Card from './Components/Card/Card';
+import ButtonAppBar from './Components/HeaderBar/AppBar';
+import Input from '@material-ui/core/Input';
+import SearchInput from './Components/Input/SearchInput';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProviderProps } from '@material-ui/core/styles/MuiThemeProvider';
 
+type Props = MuiThemeProviderProps;
 
-const App = () => {
+const App:React.SFC = (props: Props) => {
   return (
-    <Button variant="contained" color="primary">
-      Test
-    </Button>
+    <div>
+      <MuiThemeProvider theme={props.theme}>
+        <ButtonAppBar />
+        <SearchInput />
+      </MuiThemeProvider>
+    </div>
   );
 }
 
