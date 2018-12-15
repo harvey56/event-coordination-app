@@ -11,6 +11,7 @@ const renderDom = () => {
 
 renderDom();
 
+//hot reloading done in the App component with react-hot-loader
 // if (module.hot) {
 //   console.log("hot update");
 //   module.hot.accept('./App', () => {
