@@ -12,10 +12,11 @@ type Props = MuiThemeProviderProps;
 const App:React.SFC = (props: Props) => {
   return (
     <div>
-      <MuiThemeProvider theme={props.theme}>
+      {/* <MuiThemeProvider theme={props.theme}>
         <ButtonAppBar />
         <SearchInput />
-      </MuiThemeProvider>
+      </MuiThemeProvider> */}
+      <Card />
     </div>
   );
 }
