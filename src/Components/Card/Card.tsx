@@ -12,6 +12,15 @@ import Share from '@material-ui/icons/Share';
 interface OwnProps {
 
 }
+interface State {
+    location: string;
+    cardHeaderTitle: string;
+    cardHeaderSubheader: string;
+    cardMediaImage: string;
+    price: string[];
+    rating: number[];
+    isAttending: boolean;
+}
 
 interface State {
     location: string;
@@ -32,12 +41,21 @@ class EventCard extends React.Component<Props, State> {
         super(props);
 
         this.state = {
+<<<<<<< HEAD
+            location: "3 rue des lilas, 75001 Paris",
+            cardHeaderTitle: "Super cool bar in the CBD",
+            cardHeaderSubheader: "",
+            cardMediaImage: "",
+            price: ['$'],
+            rating: [1],
+=======
             location: "",
             cardHeaderTitle: "Super cool bar in the CBD",
             cardHeaderSubheader: "",
             cardMediaImage: "../../../public/pic.jpg",
             price: ['$', '$', '$', '$', '$'],
             rating: [1, 1, 1, 1, 1],
+>>>>>>> master
             isAttending: false
         }
     }
@@ -71,6 +89,20 @@ class EventCard extends React.Component<Props, State> {
             </Grid>
         </Grid>
     )
+<<<<<<< HEAD
+
+    private renderLocation = () => (    
+        <Grid container direction="row" justify="flex-start" alignItems="center" spacing={16} wrap="nowrap" >
+            <LocationOn />
+            {this.state.location}
+        </Grid>
+    )
+
+    render() {
+        const { classes } = this.props;
+        const { cardHeaderTitle, cardHeaderSubheader, cardMediaImage, price, rating, location } = this.state;
+
+=======
 
     private renderLocation = () => (
         <Grid container direction="row" justify="flex-start" alignItems="center" spacing={16} wrap="nowrap">
@@ -83,6 +115,7 @@ class EventCard extends React.Component<Props, State> {
         const { classes } = this.props;
         const { cardHeaderTitle, cardHeaderSubheader, cardMediaImage, price, rating, location } = this.state;
 
+>>>>>>> master
         return (
             <React.Fragment>
                 <Card className={classes.root}> 
@@ -93,24 +126,39 @@ class EventCard extends React.Component<Props, State> {
                                 
                                 </IconButton>
                             }
+<<<<<<< HEAD
+                            title={cardHeaderTitle}
+=======
                             title={cardHeaderTitle} // "Very cool bar in the city"
+>>>>>>> master
                             // subheader="September 14, 2018"
                         />
                     </Typography>
 
                     <CardMedia
                         style={{height: 0, paddingTop: '56.25%'}}
+<<<<<<< HEAD
+=======
                         // image={require("../../../public/pic.jpg")}
+>>>>>>> master
                         image={imgList[0].img}
                         className={classes.media}
                         title="Bar pic"
                     />
+<<<<<<< HEAD
+
+                    <CardContent>
+                        <Grid container direction="row" justify="center" alignItems="center" wrap="nowrap" className={classes.location}>
+                            <LocationOn />
+                            {this.state.location}
+=======
                         {/* <img src={cardMediaImage}/>
                     </CardMedia>*/}
 
                     <CardContent>
                         <Grid container direction="row" justify="center" alignItems="center" >
                             {this.renderLocation()}
+>>>>>>> master
                         </Grid>
                         <Grid container direction="row" justify="space-between" alignItems="center" wrap="nowrap">
                             {this.renderPriceRange()}
@@ -135,7 +183,11 @@ class EventCard extends React.Component<Props, State> {
                                     color="primary"
                                     />
                                 }
+<<<<<<< HEAD
+                                label= "I'm going"// {this.state.isAttending ? "I'm Going" : "I'm not Going"}
+=======
                                 label={this.state.isAttending ? "I'm Going" : "I'm not Going"}
+>>>>>>> master
                                 onChange={() => {this.setState({isAttending: !this.state.isAttending})}}
                             />
                         </Grid>
