@@ -27,7 +27,13 @@
     "@types/react-dom": "^16.0.11",
     "@types/webpack": "^4.4.21",
     "apollo-boost": "^0.1.22",
+    "apollo-client": "^2.4.8",
+    "apollo-link-context": "^1.0.12",
+    "apollo-link-http": "^1.5.9",
+    "apollo-link-rest": "^0.7.0",
+    "axios": "^0.18.0",
     "classnames": "^2.2.6",
+    "dotenv": "^6.2.0",
     "eslint": "^5.10.0",
     "file-loader": "^2.0.0",
     "graphql": "^14.0.2",
@@ -41,6 +47,7 @@
     "redux": "^4.0.1"
   },
   "devDependencies": {
+    "@types/graphql": "^14.0.3",
     "@types/lodash": "^4.14.119",
     "@types/node": "^10.12.12",
     "@types/webpack-env": "^1.13.6",

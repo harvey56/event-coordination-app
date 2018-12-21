@@ -12,7 +12,7 @@ module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json"]
+    extensions: [".ts", ".tsx", ".js", ".json", ".gql", ".graphql", ".mjs"]
   },
   devServer: {
     contentBase: './dist',
@@ -56,6 +56,11 @@ module.exports = {
           enforce: "pre", 
           test: /\.js$/, 
           loader: "source-map-loader" 
+        },
+        {
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: 'javascript/auto'
         }
     ]
   },
