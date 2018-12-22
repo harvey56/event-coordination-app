@@ -1,14 +1,27 @@
 type Query {
-  info: String!
-  feed: [Link!]!
+  businesses: [Business!]
+  business(id: ID!): Business
 }
 
-type Mutation {
-  post(url: String!, description: String!): Link!
-}
-
-type Link {
+type Business {
   id: ID!
-  description: String!
-  url: String!
+  alias: String!
+  name: String
+  image_url: String
+  is_closed: Boolean
+  url: String
+  price: String
+  rating: Float
+  review_count: Int
+  photos: [Photos]
+  location: Location
+  categories: String
+}
+
+type Photo {
+  Photo: String
+}
+
+type Location {
+  address: String!
 }
