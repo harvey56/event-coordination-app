@@ -1,27 +1,34 @@
-type Query {
-  businesses: [Business!]
-  business(id: ID!): Business
-}
+const { gql } = require('apollo-server-express');
 
-type Business {
-  id: ID!
-  alias: String!
-  name: String
-  image_url: String
-  is_closed: Boolean
-  url: String
-  price: String
-  rating: Float
-  review_count: Int
-  photos: [Photos]
-  location: Location
-  categories: String
-}
+const typeDefs = gql`
 
-type Photo {
-  Photo: String
-}
+  type Query {
+    businesses: [Business!]
+    business(term: String!, location: String!): Business
+  }
 
-type Location {
-  address: String!
-}
+  type Business {
+    id: ID!
+    alias: String!
+    name: String
+    image_url: String
+    is_closed: Boolean
+    url: String
+    price: String
+    rating: Float
+    review_count: Int
+    photos: [Photo]
+    location: Location
+    categories: String
+  }
+
+  type Photo {
+    Photo: String
+  }
+
+  type Location {
+    address: String!
+  }
+`
+
+module.exports = typeDefs;
