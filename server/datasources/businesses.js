@@ -10,9 +10,9 @@ class YelpAPI extends RESTDataSource {
         request.headers.set('Authorization', this.context.token);
     }
 
-    async getAllBusinesses() {
-        const res = await this.get('businesses');
-        return res && res.length ? res.map(biz => this.businessReducer(biz)) : [];
+    async getAllBusinesses({ term, location }) {
+        const res = await this.get('search', { term: term, location: location });
+        return /*res && res.length ?*/ res.businesses.map(biz => this.businessReducer(biz));//  : [];
     }
     
     businessReducer(business) {
@@ -26,9 +26,8 @@ class YelpAPI extends RESTDataSource {
             price: business.price || '',
             rating: business.rating || '',
             review_count: business.review_count || '',
-            // location: {
-            //     address: business.location.display_address
-            // },
+            location: business.location.display_address,
+            distance: (business.distance).toFixed(2)
         };
     }
 
@@ -36,17 +35,12 @@ class YelpAPI extends RESTDataSource {
     //     const res = await this.get(businessId);
     //     return this.businessReducer(res[0]);
     // }
-
-    async getBusinessByTerm({ term, location }) {
-        const res = await this.get('search', { term: term, location: location });
-        return this.businessReducer(res.businesses[0]);
-    }
       
-    getBusinessesByIds({ businessIds }) {
-        return Promise.all(
-            businessIds.map(businessId => this.getBusinessById({ businessId })),
-        );
-    }
+    // getBusinessesByIds({ businessIds }) {
+    //     return Promise.all(
+    //         businessIds.map(businessId => this.getBusinessById({ businessId })),
+    //     );
+    // }
     
   }
   

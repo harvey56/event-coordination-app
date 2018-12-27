@@ -3,31 +3,22 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
 
   type Query {
-    businesses: [Business!]
-    business(term: String!, location: String!): Business
+    businesses(term: String!, location: String!): [Business]
   }
 
   type Business {
     id: ID!
-    alias: String!
-    name: String
+    alias: String
+    name: String!
     image_url: String
     is_closed: Boolean
     url: String
     price: String
     rating: Float
     review_count: Int
-    photos: [Photo]
-    location: Location
+    location: [String]
     categories: String
-  }
-
-  type Photo {
-    Photo: String
-  }
-
-  type Location {
-    address: String!
+    distance: Float
   }
 `
 

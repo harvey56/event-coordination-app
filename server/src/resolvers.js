@@ -2,10 +2,8 @@
 
 const resolvers = {
   Query: {
-    businesses: async (_, __, { dataSources }) =>
-      dataSources.YelpAPI.getAllBusinesses(),
-    business: (_, { term, location }, { dataSources }) =>
-      dataSources.YelpAPI.getBusinessByTerm({ term: term, location: location }),
+    businesses: async (_, { term, location }, { dataSources }) =>
+      dataSources.YelpAPI.getAllBusinesses({ term: term, location: location }),
   }
 }
 
