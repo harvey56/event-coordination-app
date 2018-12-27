@@ -10,7 +10,11 @@ import Star from '@material-ui/icons/Star';
 import Favorite from '@material-ui/icons/Favorite';
 import Share from '@material-ui/icons/Share';
 interface OwnProps {
-
+    cardHeaderTitle: string;
+    image: string;
+    price: string;
+    rating: number;
+    location: string;
 }
 interface State {
     location: string;
@@ -60,7 +64,9 @@ class EventCard extends React.Component<Props, State> {
             </Grid>
             <Grid item>
             <Typography component="p">
-                {this.state.price.map( (price, idx) => <AttachMoney /> )}
+                {this.props.price}
+                {/* below iteration with mockup data */}
+                {/* {this.state.price.map( (price, idx) => <AttachMoney /> )} */}
             </Typography>
             </Grid>
         </Grid>
@@ -75,7 +81,9 @@ class EventCard extends React.Component<Props, State> {
             </Grid>
             <Grid item>
             <Typography component="p">
-                {this.state.rating.map( (star, idx) => <Star /> )}
+                {this.props.rating}
+                {/* below iteration with mockup data */}
+                {/* {this.state.rating.map( (star, idx) => <Star /> )} */}
             </Typography>
             </Grid>
         </Grid>
@@ -90,7 +98,7 @@ class EventCard extends React.Component<Props, State> {
 
     render() {
         const { classes } = this.props;
-        const { cardHeaderTitle, cardHeaderSubheader, cardMediaImage, price, rating, location } = this.state;
+        const { cardHeaderTitle, image, price, rating, /*, cardHeaderSubheader, cardMediaImage, price, rating, location*/ } = this.props;
 
         return (
             <React.Fragment>
@@ -109,7 +117,7 @@ class EventCard extends React.Component<Props, State> {
 
                     <CardMedia
                         style={{height: 0, paddingTop: '56.25%'}}
-                        image={imgList[0].img}
+                        image= {image}/*{imgList[0].img}*/
                         className={classes.media}
                         title="Bar pic"
                     />
@@ -117,7 +125,7 @@ class EventCard extends React.Component<Props, State> {
                     <CardContent>
                         <Grid container direction="row" justify="center" alignItems="center" wrap="nowrap" className={classes.location}>
                             <LocationOn />
-                            {this.state.location}
+                            {this.props.location}
                         </Grid>
                         <Grid container direction="row" justify="space-between" alignItems="center" wrap="nowrap">
                             {this.renderPriceRange()}
