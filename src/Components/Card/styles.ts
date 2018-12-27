@@ -4,6 +4,7 @@ const styles = (theme: Theme) => createStyles({
 
     root: {
         'max-width': '450px',
+        backgroundColor: '#f5f5f5',
         ...theme.mixins.gutters(),
     },
     location: {

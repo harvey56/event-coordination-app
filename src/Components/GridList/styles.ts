@@ -4,6 +4,8 @@ const styles = (theme: Theme) => createStyles({
 
     root: {
         ...theme.mixins.gutters(),
+    },
+    gridListNoTiles: {
     }
 
 })
