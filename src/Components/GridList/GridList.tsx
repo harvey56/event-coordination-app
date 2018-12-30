@@ -39,14 +39,6 @@ class ShowGridList extends React.Component<Props, State> {
       }
     }
 
-    private generate(element) {
-      return [0, 1, 2].map(value =>
-        React.cloneElement(element, {
-          key: value,
-        }),
-      );
-    }
-
     render(){
       const { classes, businesses } = this.props;
       const { barsImGoingTo, barsILove } = this.state;

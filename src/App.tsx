@@ -22,7 +22,7 @@ const App:React.SFC = (props: Props) => {
       <MuiThemeProvider theme={props.theme}>
         <ButtonAppBar />
         <SearchInput />
-        <Data />        
+        <Data location = "newcastle Australia" />        
       </MuiThemeProvider>
     </div>
   );

@@ -5,21 +5,22 @@ import ShowGridList from './Components/GridList/GridList';
 
 // get the list of bars
 export const GET_BARS = gql`
-{
-  businesses(term:"mexican", location:"NYC"){
-    id
-    name
-    distance
-    image_url
-    price
-    rating
-    location
-  }
-}
+    query FindAllBusinesses($location: String!)
+        {
+            businesses(term:"bar", location: $location){
+                id
+                name
+                distance
+                image_url
+                price
+                rating
+                location
+            }
+        }
 `
 
-export const Data = () => (
-    <Query query={GET_BARS}>
+export const Data = ({ location }) => (
+    <Query query={GET_BARS} variables={{ location }}>
         {({ data: {businesses}, loading, error }) => {
 
         if (loading || !businesses) {

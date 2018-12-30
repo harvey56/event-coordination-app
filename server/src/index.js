@@ -5,6 +5,8 @@ const typeDefs = require('./schema.graphql');
 const resolvers = require('./resolvers');
 const YelpAPI = require('../datasources/businesses');
 
+require('dotenv').config({path: '../.env'});
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -15,7 +17,7 @@ const server = new ApolloServer({
   }),
   context: () => {
     return {
-      token: "Bearer NXsuVfuXjTiJmlSs1dHn92xnXFpo3G1KaJE0lzQoAOuEMbNyhXkyeWEWoril1xWZU1sMSJQgx1ZAJ0drAup9Sa9FNf5eJCKiWb7_t1eWRhSlkaVuWFXGK2cUjSgaXHYx",
+      token: `Bearer ${process.env.API_KEY}`
     };
   },
 })
