@@ -2,7 +2,7 @@ import * as React from 'react';
 import { withStyles, WithStyles, Paper, Typography, Card, CardHeader, IconButton, CardContent, CardActions, FormControlLabel, Switch, CardMedia, Grid, ButtonBase } from '@material-ui/core';
 import styles from './styles'; 
 
-import imgList from '../../options';
+// import imgList from '../../options';
 
 import LocationOn from '@material-ui/icons/LocationOn';
 import AttachMoney from '@material-ui/icons/AttachMoney';
