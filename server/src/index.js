@@ -1,18 +1,34 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const { ApolloServer, gql } = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express');
 const cors = require('cors');
 const typeDefs = require('./schema.graphql');
 const resolvers = require('./resolvers');
 const YelpAPI = require('../datasources/businesses');
-const graphqlHTTP = require('express-graphql');
 
 require('dotenv').config({path: '../.env'});
+
+const router = express.Router();
+const app = express();
+
+app.use(cors());
+app.use(router);
+
+router.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../dist/index.html'));
+});
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  playground: true,
+  formatError: error => ({
+    name: error.name,
+    message: error.message.replace('Context creation failed: ', '')
+  }),
+  playground: {
+		settings: {
+      		'editor.theme': 'dark'
+    }
+  },
   introspection: true,
   dataSources: () => ({
 	  YelpAPI: new YelpAPI()
@@ -24,21 +40,10 @@ const server = new ApolloServer({
   },
 })
 
-const app = express();
-app.use(cors());
+var port = process.env.PORT || 4000;
 
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
+server.applyMiddleware({ app, path: '/graphql' });
 
-// app.use('/graphql', graphqlHTTP({
-//   schema: typeDefs,
-//   rootValue: resolvers,
-//   graphiql: true,
-// }));
-
-// server.applyMiddleware({ app, path: '/graphql' });
-server.applyMiddleware({ app });
-
-app.listen({ port: process.env.PORT || 4000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-)
+app.listen({ port }, () => {
+  console.log(`Apollo Server is listening on ${server.graphqlPath} on port ${port}`);
+});
