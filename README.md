@@ -10,9 +10,9 @@ The app uses the YELP API. It allows the authenticated user to search for bars a
     * Typescript
     * GraphQL
     * Material-UI
-    * Redux
+    * Apollo
     * ExpressJS
     * MongoDB
 
-### App running at https://serene-hypatia-4bca37.netlify.com/
+### App running at https://event-coordination.herokuapp.com/
 

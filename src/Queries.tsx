@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import * as React from 'react';
 import ShowGridList from './Components/GridList/GridList';
 
@@ -19,7 +19,12 @@ export const GET_BARS = gql`
         }
 `
 
-export const Data = ({ location }) => (
+type DataProps = {
+    location: string,
+}
+
+// export class Data extends React.Component<Props> {
+export const Data: React.SFC<DataProps> = ({ location }) => (
     <Query query={GET_BARS} variables={{ location }}>
         {({ data: {businesses}, loading, error }) => {
 
@@ -36,5 +41,25 @@ export const Data = ({ location }) => (
         )
         }
         }
-    </Query>
-);
+    </Query>            
+)
+
+// export const Data: React.FunctionComponent<{location: string}> = ({location}) => (
+//     <Query query={GET_BARS} variables={{ location }}>
+//         {({ data: {businesses}, loading, error }) => {
+
+//         if (loading || !businesses) {
+//             return <div>Loading ...</div>;
+//         }
+
+//         if (error) {
+//             console.log("error: ", error);
+//         }
+
+//         return(
+//             <ShowGridList businesses={businesses} />
+//         )
+//         }
+//         }
+//     </Query>
+// );
