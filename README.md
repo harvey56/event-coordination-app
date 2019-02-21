@@ -14,5 +14,5 @@ The app uses the YELP API. It allows the authenticated user to search for bars a
     * ExpressJS
     * MongoDB
 
-### App running at https://event-coordination.herokuapp.com/
+### server API : https://event-coordination-app.herokuapp.com/
 
