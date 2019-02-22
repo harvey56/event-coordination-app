@@ -8,15 +8,15 @@
         "allowJs": true,
         "jsx": "react",
         "moduleResolution": "node",
-        "rootDir": "./src/",
+        "rootDir": "./src/client/",
         "noImplicitReturns": true,
-        "noImplicitThis": true,
+        "noImplicitThis": false,
         "noImplicitAny": false,
         "strictNullChecks": true,
         "types": ["node"],
     },
     "include": [
-        "./src/**/*"
+        "./src/client/**/*"
     ],
     "exclude": [
         "node_modules",
