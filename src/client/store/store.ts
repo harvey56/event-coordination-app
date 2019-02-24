@@ -7,9 +7,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 // Setup the middleware to watch between the Reducers and the Actions
 const sagaMiddleware = createSagaMiddleware();
-sagaMiddleware.run(CombinedSagas);
-
-const loggerMiddleware = createLogger()
+const loggerMiddleware = createLogger();
 
 const store = createStore(
   rootReducer,
@@ -17,5 +15,7 @@ const store = createStore(
     applyMiddleware(sagaMiddleware, loggerMiddleware)
   ) 
 );
+
+sagaMiddleware.run(CombinedSagas);
 
 export default store;
