@@ -15,6 +15,9 @@ import ApolloClient, { gql } from 'apollo-boost';
 // import GraphQLClient from './GraphqlClient';
 // import { setContext } from 'apollo-link-context';
 import store from './store/store';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import SignUp from './Components/SignUp/SignUp';
+import Login from './Components/Login/Login';
 
 // Apollo client definition
 const client = new ApolloClient({
@@ -30,7 +33,13 @@ const Root = ({store}) => {
     return (
       <Provider store={store}>
         <ApolloProvider client={client}>
-          <App />
+          <BrowserRouter>
+            <Switch>
+              <Route exact path="/" component={App} />
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={SignUp} />
+            </Switch>
+          </BrowserRouter>
         </ApolloProvider>
       </Provider>
     )
