@@ -2,21 +2,23 @@ import {
     LOGIN_REQUEST, 
     LOGIN_SUCCESS, 
     LOGIN_FAILURE, 
-    SIGNUP, 
+    SIGNUP_REQUEST,
+    SIGNUP_SUCCESS, 
     SIGNUP_ERROR ,
     LOGOUT_SUCCESS,
-    INVALID_REQUEST
-} from '../actions/authActions';
+} from '../actions/types';
+import { AuthActionType, AuthState } from '../actions/authActions';
 
-const initialState = {
-  loginError: '',
-  registrationError: '',
-  permissionsError: '',
+const initialState: AuthState = {
+  //loginError: '',
+  // registrationError: '',
+  // permissionsError: '',
   isFetching: false,
-  isAuthenticated: localStorage.getItem('id_token') ? true : false
+  isAuthenticated: localStorage.getItem('id_token') ? true : false,
+  user: {error: '', user: ''}
 }
 
-const auth = (state = initialState, action) => {
+export const authReducer = (state = initialState, action: AuthActionType): AuthState => {
 
   switch (action.type) {
   
@@ -24,23 +26,22 @@ const auth = (state = initialState, action) => {
       return { ...state,
         isFetching: true,
         isAuthenticated: false,
-        user: action.creds
+        user: action.payload.user
       };
   
     case LOGIN_SUCCESS:
       return { ...state,
         isFetching: false,
         isAuthenticated: true,
-        loginError: '',
-        registrationError: '',
-        permissionsError: ''
+        // loginError: '',
+        // registrationError: '',
+        // permissionsError: ''
       };
   
     case LOGIN_FAILURE:
       return { ...state,
         isFetching: false,
         isAuthenticated: false,
-        loginError: action.error
       };
    
     case LOGOUT_SUCCESS:
@@ -49,25 +50,25 @@ const auth = (state = initialState, action) => {
         isAuthenticated: false
       };
   
-    case SIGNUP:
+    case SIGNUP_REQUEST:
       return { ...state,
         isFetching: true,
         isAuthenticated: false,
-        user: action.user
+        user: action.payload.user
+      };
+
+    case SIGNUP_SUCCESS:
+      return { ...state,
+        isFetching: true,
+        isAuthenticated: false,
+        user: action.payload.user
       };
 
     case SIGNUP_ERROR:
       return { ...state,
         isFetching: false,
         isAuthenticated: false,
-        registrationError: action.error
-      };
-
-    case INVALID_REQUEST:
-      return { ...state,
-        isFetching: false,
-        isAuthenticated: false,
-        permissionsError: action.error
+        user: action.payload.user
       };
  
     default:
@@ -76,4 +77,4 @@ const auth = (state = initialState, action) => {
   }
 }
 
-export default auth;
+export default authReducer;
