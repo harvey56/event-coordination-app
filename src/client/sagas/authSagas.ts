@@ -15,8 +15,8 @@ function* handleSignUp(userData) {
   }
 }
 
-function* signupWatcher () {  
+function* signupUser () {  
   yield takeLatest(types.SIGNUP_REQUEST, handleSignUp)
 }
 
-export default signupWatcher;  
+export default signupUser;  
