@@ -5,8 +5,6 @@ import {
     CssBaseline, 
     FormControl, 
     InputLabel,
-    FormControlLabel,
-    Checkbox,
     Input,
     Paper,
     Typography,
@@ -18,11 +16,10 @@ import { LockOutlined } from '@material-ui/icons';
 import withStyles from '@material-ui/core/styles/withStyles';
 import * as yup from 'yup';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-import { AuthState, requestLogin } from '../../actions/authActions';
-import signupUser from '../../sagas/authSagas';
-import { Store } from '../../reducers/rootReducer';
-import axios from 'axios';
+import { AuthState } from '../../actions/authActions';
+import { signupRequest } from '../../actions/authActions';
+import { Redirect } from 'react-router';
+
 
 const styles = (theme:Theme) => createStyles({
   main: {
@@ -61,17 +58,19 @@ interface OwnState {
   password: string,
   confirmPassword: string,
   email: string,
-  errors: object
+  redirectToDasboard: boolean
 }
 interface OwnProps {
 
 }
-export interface AuthStateProps extends AuthState {
-  
+export interface AuthStateProps {
+  isAuthenticated: boolean,
+  isFetching: boolean,
+  user: object | undefined
 }
 
 export interface DispatchProps {
-  signupUser: (newUser: object) => void
+  signupRequest: (newUser: object) => void
 }
 
 type Props = OwnProps & WithStyles & AuthStateProps & DispatchProps;
@@ -86,7 +85,7 @@ class SignUp extends React.Component<Props, State> {
 			password: '',
 			confirmPassword: '',
 			email: '',
-      errors: {},
+      redirectToDasboard: false
     }
 
     this.handleSubmitForm = this.handleSubmitForm.bind(this);
@@ -99,9 +98,10 @@ class SignUp extends React.Component<Props, State> {
     } as Pick<OwnState, any>) 
   } 
 
-  handleSubmitForm(event: any) {
+  handleSubmitForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     let { username, password, confirmPassword, email } = this.state;
+
     const userSchema = yup.object({
         username: yup.string().required(),
         password: yup.string().min(6, "password must be at least 6 characters long").required(),
@@ -113,34 +113,16 @@ class SignUp extends React.Component<Props, State> {
     
     userSchema.isValid(newUser)
     .then( valid => {
-        console.log("valid: ", valid);
-        valid ? this.props.signupUser({username: username, email: email, password: password}) : console.log("user schema is not valid")
+        valid ? this.props.signupRequest({username: username, email: email, password: password}) : console.log("user schema is not valid")
     })
-    .catch( err => console.log("error: ", err) );
-    
-    // this.signUpApi(username, password);
-    // axios.post('/api/signup', {email: email, password: password, username: username}).then( res => {
-      // dispatch()
-      // }
-    // )
-    // .catch( err => console.log("err: ", err))
-  }
-
-  async signUpApi(email: string, password: string) {
-    const res = await fetch('/api/signup', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json'
-      },
-      body: JSON.stringify({ email, password })
-    })
-    
-    return await res.json();
+    .catch( err => console.log("signup error: ", err) );
   }
 
   render() {
     const { classes } = this.props;
-    let { username, password, confirmPassword, email, errors } = this.state;
+    let { username, password, confirmPassword, email } = this.state;
+
+    if (this.props.isAuthenticated) return <Redirect to={"/"} />;
 
     return (
       <main className={classes.main}>
@@ -169,10 +151,6 @@ class SignUp extends React.Component<Props, State> {
               <InputLabel htmlFor="password">Confirm Password</InputLabel>
               <Input name="confirmPassword" type="password" id="confirm-password" autoComplete="current-password" value = {confirmPassword} onChange={this.handleChange}/>
             </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <div>
               <Button
                 type="submit"
@@ -191,19 +169,13 @@ class SignUp extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: AuthState /*Store*/, props: OwnProps): AuthStateProps => {
+const mapStateToProps = (state: AuthState): AuthStateProps => {
   return {
-  //   isauth: state.requestLogin
-    isAuthenticated: state.isAuthenticated,
-    isFetching: state.isFetching,
-    user: state.user
+    isAuthenticated: state.authReducer.isAuthenticated,
+    isFetching: state.authReducer.isFetching,
+    user: state.authReducer.user
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<any>, ownProps: OwnProps): DispatchProps => ({
-  signupUser
-});
-
-// export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles))(SignUp);
 const styledComponent = withStyles(styles)(SignUp);
-export default connect(mapStateToProps, {signupUser})(styledComponent);
+export default connect(mapStateToProps, {signupRequest})(styledComponent);
