@@ -1,10 +1,9 @@
-import { combineReducers, Dispatch, Reducer, Action, AnyAction } from 'redux';
+import { combineReducers } from 'redux';
 import { authReducer } from './authReducer';
-import { AuthStateProps } from '../Components/SignUp/SignUp';
-// import { Store } from '../store/store';
+import { AuthState } from '../actions/authActions';
 
 export type Store = {
-    authReducer: AuthStateProps
+    authReducer: AuthState
 }
 
 const rootReducer = combineReducers<Store>({
