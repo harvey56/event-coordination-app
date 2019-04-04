@@ -9,6 +9,9 @@ const styles = (theme: Theme) => createStyles({
     },
     location: {
         margin: '15px'
+    },
+    faviconisactive: {
+        color: 'red'
     }
 
 })

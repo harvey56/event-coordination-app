@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Input from '@material-ui/core/Input';
 import { TextField, WithStyles, withStyles, Button, Grid, Typography } from '@material-ui/core';
 import styles from './styles';
 
@@ -8,13 +7,10 @@ interface OwnProps {
     searchLocation: string
     onClick: () => void
 }
-
 interface State {
 }
 
 type Props = WithStyles & OwnProps
-
-// const SearchInput: React.SFC<Props> = (props: Props) => {
 class SearchInput extends React.Component<Props, State> {
     
     constructor(props: Props){
@@ -22,7 +18,7 @@ class SearchInput extends React.Component<Props, State> {
 
     }
     
-    private handleOnChange = (event: any) => {
+    private handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.props.onSearchLocationChange(event.target.value);
     };
 
@@ -42,7 +38,6 @@ class SearchInput extends React.Component<Props, State> {
                 </Typography>
                 <Grid container direction="row" alignItems="center" justify="center" >
                     <TextField
-                        // className={classes.margin}
                         InputLabelProps={{
                         classes: {
                             root: classes.cssLabel,

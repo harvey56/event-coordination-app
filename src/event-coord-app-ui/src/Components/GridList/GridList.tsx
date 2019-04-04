@@ -1,16 +1,24 @@
 import * as React from 'react';
-import { withStyles, WithStyles, Grid, GridList, GridListTile, Typography, List, ListItem, ListItemIcon, ListItemText, Divider, MenuItem } from '@material-ui/core';
+import { 
+  withStyles, 
+  WithStyles, 
+  Grid, 
+  GridList, 
+  GridListTile, 
+  Typography, 
+  List, 
+  ListItem, 
+  ListItemIcon, 
+  ListItemText, 
+  MenuItem 
+} from '@material-ui/core';
 import Card from '../Card/Card';
-import { withTheme } from '@material-ui/core/styles';
 import styles from './styles'; 
-import CheckCircleOutline from '@material-ui/icons/CheckCircleOutline';
-import AccessibleForward from '@material-ui/icons/AccessibleForward';
-import Favorite from '@material-ui/icons/Favorite';
+import { CheckCircleOutline, AccessibleForward, Favorite } from '@material-ui/icons';
 
 interface OwnProps {
     businesses: Businesses[];
 }
-
 interface Businesses {
   id: string;
   name: string;
@@ -19,16 +27,12 @@ interface Businesses {
   rating: number;
   location: string;
 }
-
 interface State {
   barsImGoingTo: string[];
   barsILove: string[];
 }
 
-// interface OwnProps extends WithStyles<typeof styles>{}
-
 type Props = OwnProps & WithStyles
-
 class ShowGridList extends React.Component<Props, State> {
 
     constructor(props: Props){
@@ -37,6 +41,36 @@ class ShowGridList extends React.Component<Props, State> {
         barsImGoingTo: [],
         barsILove: []
       }
+    }
+
+    private updateBarsILove = (businessName: string, love: boolean) => {
+      if (love) {
+        if (!this.state.barsILove.includes(businessName))
+          this.state.barsILove.push(businessName);
+      }
+      else {
+        let obj = this.state.barsILove.indexOf(businessName);
+        if (obj !== -1) this.state.barsILove.splice(obj,1);
+      }
+
+      this.setState( (prevState) => ({
+        barsILove: prevState.barsILove
+      }));
+    }
+
+    private updateBarsImGoingTo = (businessName: string, attendance: boolean) => {
+      if (attendance) {
+        if (!this.state.barsImGoingTo.includes(businessName))
+          this.state.barsImGoingTo.push(businessName);
+      }
+      else {
+        let obj = this.state.barsImGoingTo.indexOf(businessName);
+        if (obj !== -1) this.state.barsImGoingTo.splice(obj,1);
+      }
+
+      this.setState( (prevState) => ({
+            barsImGoingTo: prevState.barsImGoingTo
+      }));
     }
 
     render(){
@@ -56,6 +90,8 @@ class ShowGridList extends React.Component<Props, State> {
                           price={business.price}
                           rating={business.rating}
                           location={business.location}
+                          attendBar={this.updateBarsImGoingTo}
+                          loveBar={this.updateBarsILove}
                         />
                       </GridListTile>
                     )

@@ -13,11 +13,9 @@ interface State {
     location: string
 }
 
-// interface OwnProps extends WithStyles<typeof styles>{}
-
 type Props = OwnProps & WithStyles
 
-class Main extends React.Component<Props, State> {
+class SearchBar extends React.Component<Props, State> {
 
     constructor(props: Props){
       super(props);
@@ -41,26 +39,20 @@ class Main extends React.Component<Props, State> {
     }
 
     render(){
-        const authenticated = true;
-        const { searchLocation, location/*,authenticated*/ } = this.state;
+        const { classes } = this.props;
+        const { searchLocation, location } = this.state;
         const ShowSearchedData = <Data location={location}/>;
         const Blank = <div></div>;
-        const SearchPage = (
-          <React.Fragment>
-            <SearchInput onSearchLocationChange={this.handleChangeSearchLocation} searchLocation={searchLocation} onClick={this.setLocation}/>
-            { location ? ShowSearchedData : Blank }
-          </React.Fragment>
-        );
-        const LandingPage = <div></div>
 
         return (
             <React.Fragment>
-                {/* <Paper className={classes.root} elevation={2}> */}
-                { authenticated ? SearchPage : LandingPage }
-                {/* </Paper> */}
+                <Paper className={classes.root} elevation={2}>
+                  <SearchInput onSearchLocationChange={this.handleChangeSearchLocation} searchLocation={searchLocation} onClick={this.setLocation}/>
+                  { location ? ShowSearchedData : Blank }
+                </Paper>
             </React.Fragment>
         )
     }
 }
 
-export default withStyles(styles)(Main);
+export default withStyles(styles)(SearchBar);

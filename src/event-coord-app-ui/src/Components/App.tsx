@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import ButtonAppBar from './HeaderBar/AppBar';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import {theme} from './styles';
-import { Route, Link, Switch } from 'react-router-dom';
+import { MuiThemeProvider, withTheme, WithTheme } from '@material-ui/core/styles';
+import { Route, Switch, withRouter, RouteComponentProps } from 'react-router-dom';
+import SignUp, { AuthStateProps } from './SignUp/SignUp';
 import Login from './Login/Login';
-import SignUp from './SignUp/SignUp';
-import Main from './Main/Main';
-// import { GET_BARS } from './Queries';
-// import ShowGridList from './Components/GridList/GridList';
+import Logout from './Logout/Logout';
+import SearchPage from './SearchBar/SearchBar';
+import PrivateRoute from './SearchBar/PrivateRoute';
+import { AuthState } from '../actions/authActions';
+import { connect } from 'react-redux';
 
 interface OwnProps {
 }
@@ -17,32 +18,37 @@ interface State {
 
 }
 
-type Props = /*MuiThemeProviderProps &*/ OwnProps;
-
-
-// const App:React.SFC = (props: Props) => {
+type Props = OwnProps & WithTheme & AuthStateProps & RouteComponentProps<{id: string}>;
 class App extends React.Component<Props, State> {
 
-  constructor(props: Props){
-    super(props);
-
-    this.state = {
-
-    }
-  }
-
   render(){
+    const { theme } = this.props;
+    
     return (
-        <MuiThemeProvider theme={theme}>
-          <ButtonAppBar />
-            <Switch>
-              <Route exact path="/" component={Main} />
-              <Route path="/login" component={Login} />
-              <Route path="/signup" component={SignUp} />
-            </Switch>                          
+      <MuiThemeProvider theme={theme}>
+          <ButtonAppBar {...this.props}/>
+          <Switch>
+            <PrivateRoute exact path="/" {...this.props} component={SearchPage}/>
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={SignUp} />
+            <Route path="/logout" component={Logout} />
+          </Switch>                          
       </MuiThemeProvider>
     );
   }
 }
 
-export default hot(module)(App);
+
+
+const mapStateToProps = (state: AuthState, props: OwnProps): AuthStateProps => {
+  return {
+    isAuthenticated: state.authReducer.isAuthenticated,
+    isFetching: state.authReducer.isFetching,
+    user: state.authReducer.user
+  };
+};
+
+const styledComponent = withTheme()(App);
+export default withRouter(connect(mapStateToProps, {})(styledComponent));
+
+// export default hot(module)(App);
