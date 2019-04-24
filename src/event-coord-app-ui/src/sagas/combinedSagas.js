@@ -1,8 +1,11 @@
 import { all, fork } from  'redux-saga/effects';
-import signupUser from './authSagas';
+import signupUser, { loginUser, logoutUser, checkToken } from './authSagas';
 
 export  default  function*  CombinedSagas() {
     yield  all([
-        fork(signupUser),
+        fork(signupUser), 
+        fork(loginUser), 
+        fork(logoutUser),
+        fork(checkToken)
      ]);
 }

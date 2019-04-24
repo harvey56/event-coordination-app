@@ -17,7 +17,10 @@ const initialState: AuthState = {
   authReducer: {
     isFetching: false,
     isAuthenticated: localStorage.getItem('id_token') ? true : false,
-    user: {error: '', user: ''}
+    user: {},
+    error: {
+      error: ''
+    }
   }
 }
 
@@ -42,6 +45,7 @@ export const authReducer = (state = initialState, action: AuthActionType) => {
       return { ...state,
         isFetching: false,
         isAuthenticated: false,
+        error: action.payload
     };
    
     case LOGOUT_REQUEST:

@@ -34,14 +34,13 @@ function* signupUser() {
 }
 
 function* handleLogin(userData: AnyAction) {
-  const { email, password } = userData.payload;
   try {
-    yield call(loginApi, email, password);
-    yield put({ type: LOGIN_SUCCESS });    
+    const response = yield call(loginApi, userData.payload.email, userData.payload.password);
+    yield put({ type: LOGIN_SUCCESS, response });    
 
   } catch (err) {
-    const res = yield call(handleApiErrors, err);
-    yield put({ type: LOGIN_FAILURE, res })
+    const payload = yield call(handleApiErrors, err);
+    yield put({ type: LOGIN_FAILURE, payload })
   }
 }
 

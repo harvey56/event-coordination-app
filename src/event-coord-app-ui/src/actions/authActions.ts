@@ -15,8 +15,11 @@ import {
 export interface AuthState {
   authReducer : {
     isFetching: boolean,
-    isAuthenticated: boolean ,
-    user?: { error: string, user: string } 
+    isAuthenticated: boolean,
+    user?: object,
+    error?: {
+      error: string
+    }
   }
 }
 interface LoginRequestAction {

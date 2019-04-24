@@ -3,7 +3,8 @@ import setAuthToken from './setAuthToken';
 import jwt_decode from "jwt-decode";
 
 export function handleApiErrors (response: any) {  
-  if (!response) throw Error(response.statusText)
+  if (!response) throw Error(response.statusText);
+  return response.response.data;
 }
 
 export function signUpApi(username: string, email: string, password: string) {
@@ -24,7 +25,7 @@ export function loginApi(email: string, password: string) {
     const decoded = jwt_decode(id_token);
     return decoded;
   })
-  .catch((error) => { throw error })
+  .catch((error) => {if (error) throw error})
 }
 
 export function checkTokenApi(tokenFromStorage: string) {
