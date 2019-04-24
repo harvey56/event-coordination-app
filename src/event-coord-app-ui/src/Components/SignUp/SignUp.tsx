@@ -9,8 +9,6 @@ import {
     Paper,
     Typography,
     WithStyles,
-    createStyles,
-    Theme
 } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -19,46 +17,14 @@ import { connect } from 'react-redux';
 import { AuthState } from '../../actions/authActions';
 import { signupRequest } from '../../actions/authActions';
 import { Redirect } from 'react-router';
-
-
-const styles = (theme:Theme) => createStyles({
-  main: {
-    width: 'auto',
-    display: 'block', // Fix IE 11 issue.
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-  paper: {
-    marginTop: theme.spacing.unit * 8,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
-  },
-  avatar: {
-    margin: theme.spacing.unit,
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing.unit,
-  },
-  submit: {
-    marginTop: theme.spacing.unit * 3,
-  },
-});
+import styles from './styles';
 
 interface OwnState {
   username: string,
   password: string,
   confirmPassword: string,
   email: string,
-  redirectToDasboard: boolean
+  formErrors: Array<string>
 }
 interface OwnProps {
 
@@ -66,14 +32,17 @@ interface OwnProps {
 export interface AuthStateProps {
   isAuthenticated: boolean,
   isFetching: boolean,
-  user: object | undefined
+  user: object | undefined,
+  error: {
+    error: string
+  } | undefined
 }
 
 export interface DispatchProps {
   signupRequest: (newUser: object) => void
 }
 
-type Props = OwnProps & WithStyles & AuthStateProps & DispatchProps;
+type Props = OwnProps & WithStyles<typeof styles> & AuthStateProps & DispatchProps;
 type State = OwnState;
 
 class SignUp extends React.Component<Props, State> {
@@ -85,7 +54,7 @@ class SignUp extends React.Component<Props, State> {
 			password: '',
 			confirmPassword: '',
 			email: '',
-      redirectToDasboard: false
+      formErrors: [""]
     }
 
     this.handleSubmitForm = this.handleSubmitForm.bind(this);
@@ -111,6 +80,8 @@ class SignUp extends React.Component<Props, State> {
       
     const newUser = {username: username, email: email, password: password, confirmPassword: confirmPassword};
     
+    userSchema.validate(newUser).catch( err => this.setState({formErrors: err.errors}) );
+
     userSchema.isValid(newUser)
     .then( valid => {
         valid ? this.props.signupRequest({username: username, email: email, password: password}) : console.log("user schema is not valid")
@@ -120,7 +91,7 @@ class SignUp extends React.Component<Props, State> {
 
   render() {
     const { classes } = this.props;
-    let { username, password, confirmPassword, email } = this.state;
+    let { username, password, confirmPassword, email, formErrors } = this.state;
 
     if (this.props.isAuthenticated) return <Redirect to={"/"} />;
 
@@ -161,6 +132,15 @@ class SignUp extends React.Component<Props, State> {
               >
                 Sign Up
               </Button>
+              {
+              formErrors
+              ?               
+              <Typography className={classes.errormessage}>
+                {formErrors}
+              </Typography> 
+              : 
+              ""
+            }
             </div>
           </form>
         </Paper>
@@ -173,7 +153,8 @@ const mapStateToProps = (state: AuthState): AuthStateProps => {
   return {
     isAuthenticated: state.authReducer.isAuthenticated,
     isFetching: state.authReducer.isFetching,
-    user: state.authReducer.user
+    user: state.authReducer.user,
+    error: state.authReducer.error
   };
 };
 

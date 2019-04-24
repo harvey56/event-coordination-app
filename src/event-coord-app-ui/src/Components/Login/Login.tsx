@@ -11,44 +11,11 @@ import {
 } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
-import { Theme, createStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { requestLogin, AuthState } from '../../actions/authActions';
 import { AuthStateProps } from '../SignUp/SignUp';
 import { Redirect } from 'react-router';
-
-const styles = (theme: Theme) => createStyles({
-  main: {
-    width: 'auto',
-    display: 'block', // Fix IE 11 issue.
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-  paper: {
-    marginTop: theme.spacing.unit * 8,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
-  },
-  avatar: {
-    margin: theme.spacing.unit,
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing.unit,
-  },
-  submit: {
-    marginTop: theme.spacing.unit * 3,
-  },
-});
-
+import styles from './styles';
 interface OwnProps {
 
 }
@@ -85,11 +52,11 @@ class Login extends React.Component<Props, State> {
   handleOnSubmit(event: React.FormEvent<HTMLFormElement>){
     event.preventDefault();
     let { email, password } = this.state;
-    this.props.requestLogin({email: email, password: password});
+    this.props.requestLogin({email: email, password: password})
   }
 
   render(){
-    const { classes } = this.props;
+    const { classes, error } = this.props;
     let { password, email } = this.state;
 
     if (this.props.isAuthenticated) return <Redirect to={"/"} />;
@@ -121,7 +88,16 @@ class Login extends React.Component<Props, State> {
               className={classes.submit}
             >
               Sign in
-            </Button>
+            </Button>  
+            {
+              error 
+              ?               
+              <Typography className={classes.errormessage}>
+                {error.error}
+              </Typography> 
+              : 
+              ""
+            }
           </form>
         </Paper>
       </main>
@@ -133,7 +109,8 @@ const mapStateToProps = (state: AuthState, props: OwnProps): AuthStateProps => {
   return {
     isAuthenticated: state.authReducer.isAuthenticated,
     isFetching: state.authReducer.isFetching,
-    user: state.authReducer.user
+    user: state.authReducer.user,
+    error: state.authReducer.error
   };
 };
 

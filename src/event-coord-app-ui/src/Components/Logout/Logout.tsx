@@ -5,8 +5,6 @@ import {
     Paper,
     Typography,
     WithStyles,
-    createStyles,
-    Theme
 } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -14,31 +12,7 @@ import { connect } from 'react-redux';
 import { AuthState } from '../../actions/authActions';
 import { logoutRequest } from '../../actions/authActions';
 import { Redirect } from 'react-router';
-
-const styles = (theme:Theme) => createStyles({
-  main: {
-    width: 'auto',
-    display: 'block', // Fix IE 11 issue.
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-  paper: {
-    marginTop: theme.spacing.unit * 8,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
-  },
-  avatar: {
-    margin: theme.spacing.unit,
-    backgroundColor: theme.palette.secondary.main,
-  },
-});
+import styles from './styles';
 
 interface OwnState {
   redirect: boolean
@@ -55,7 +29,7 @@ export interface AuthStateProps {
 }
 
 export interface DispatchProps {
-  logoutRequest: () => any
+  logoutRequest: () => void
 }
 
 type Props = OwnProps & WithStyles & AuthStateProps & DispatchProps;
@@ -70,11 +44,9 @@ class Logout extends React.Component<Props, State> {
     }
   }
 
-  componentDidMount(){
-    this.props.logoutRequest()
-    .then( 
-      () => { setTimeout(() => this.setState({ redirect: true }), 3000); }
-    )
+  async componentDidMount(){
+    await this.props.logoutRequest();
+    return await setTimeout(() => this.setState({ redirect: true }), 3000);
   }
 
   render() {
