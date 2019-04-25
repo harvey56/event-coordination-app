@@ -7,6 +7,9 @@ const styles = (theme: Theme) => createStyles({
     },
     menuitem: {
         alignItems: 'center'
+    },
+    demo: {
+        minHeight: 200
     }
 
 })

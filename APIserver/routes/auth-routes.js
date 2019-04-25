@@ -14,24 +14,17 @@ const MongoClient = mongodb.MongoClient;
 
 const router = module.exports = express.Router();
 
-function createToken(username) {
-  return jwt.sign({user: username}, process.env.JWTTOKEN_SECRET, { expiresIn: 60 * 30 });
+function createToken(user_id) {
+  return jwt.sign({user: user_id}, process.env.JWTTOKEN_SECRET, { expiresIn: 60*60*24 });
 }
-
-router.get('/signup', function(req, res,) {
-  res.send("got api/signup/")
-})
 
 // Sign Up new user
 router.post('/signup', function(req, res) {
 
   const user = req.body;
-  console.log("user registering: ", user);
   const { email, username, password } = req.body;
-  console.log('New registration received on server');
 
   const validation = validateUser(user);
-  console.log("validation: ", validation);
   if (validation.isValid) { // true if all fields have been entered correctly
       MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) throw err;
@@ -48,23 +41,29 @@ router.post('/signup', function(req, res) {
                 email,
                 password: hash,
               }
-              console.log("userProfile: ", userProfile);
 
               db.collection('users').insertOne({ userProfile })
               .then( () => {
-                res.status(201).send({
+                res.setHeader("Access-Control-Allow-Headers", "X-Requested-With", "Content-Type", "Authorization");
+                return res.status(201).send({
                   user: username,
-                  id_token: createToken(username)
+                  id_token: createToken(userProfile.email)
                 });
               })
-              .catch(error => { console.log('error: ', error.message); });
+              .catch(error => { 
+                console.log('error: ', error); 
+                throw error;
+              });
             }
             else { 
               res.status(400).send('This user already exists in the database') 
             }
           })
           .then ( () => { client.close(); })
-          .catch(error => { console.log('error: ', error.message); });      
+          .catch(error => { 
+            console.log('error: ', error); 
+            throw error;
+          });      
       })
   }
   
@@ -75,10 +74,9 @@ router.post('/signup', function(req, res) {
 });
 
 // Handle user login
-router.post('/api/users/login', function(req, res) {
+router.post('/login', function(req, res) {
 
-  const user = req.body;
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
 
   MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
     if (err) throw err;
@@ -89,28 +87,67 @@ router.post('/api/users/login', function(req, res) {
     db.collection('users').findOne({ "userProfile.email": email })
       .then( (data) => {
         if (data === null) { // user does not exist in database
-          console.log('User does not exist');
-          res.status(401).send('User does not exist');
+          res.status(401).send({
+            error: 'User does not exist'
+          });
         }        
-
+        
         bcrypt.compare(password, data.userProfile.password)
           .then( match => { // if password is right, match is true
             if (match) {
-              res.status(201).send({
-                user: username,
-                id_token: createToken(username)
+              return res.status(201).send({
+                user: data.userProfile.username,
+                id_token: createToken(data.userProfile.email)
               });
             }
-            res.status(401).send('Wrong password');
+            else {
+              return res.status(401).send({
+                error: 'Wrong password'
+              });
+            }
           })  
           .catch(error => { 
-            console.log('error: ', error.message); 
+            console.log('error: ', error); 
+            throw error;
           });        
       })
       .then ( () => { client.close(); })
       .catch(error => { 
         console.log('error: ', error.message); 
+        throw error;
       });
 
   })
+});
+
+router.get('/checkToken', function(req, res, next) {
+  const token = req.body.token || req.query.token;
+  
+  if (!token) {
+   return res.status(401).json({message: 'no token'});
+  }
+
+  jwt.verify(token, process.env.JWTTOKEN_SECRET, function(err, user) {
+    if (err) throw err;
+
+    MongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+      if (err) throw err;
+  
+      assert.equal(null, err);
+      const db = client.db('event-coord-app');
+  
+      db.collection('users').findOne({ "userProfile.email": user.user })
+      .then( () => {
+        res.json({
+          username: res.username,
+          token: token
+        });
+      })
+      .then ( () => { client.close(); })
+      .catch(error => { 
+        console.log('error: ', error.message); 
+        throw error;
+      });
+    });
+  });
 });

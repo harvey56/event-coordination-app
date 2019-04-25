@@ -1,8 +1,6 @@
 import * as React from "react";
 import {SvgIcon} from "@material-ui/core";
 
-import LocationOn from '@material-ui/icons/LocationOn';
-
 export function HomeIcon(props: any) {
   return (
     <SvgIcon {...props}>

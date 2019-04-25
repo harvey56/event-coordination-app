@@ -10,6 +10,10 @@ const styles = (theme: Theme) => createStyles({
     location: {
         margin: '15px'
     },
+    media: {
+        height: 0, 
+        paddingTop: '56.25%'
+    },
     faviconisactive: {
         color: 'red'
     }

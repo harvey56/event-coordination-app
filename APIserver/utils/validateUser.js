@@ -11,12 +11,12 @@ module.exports = function validateUser(data) {
   if (Validator.isEmpty(data.password)) { 
     errors.password = 'Password is required' 
   }
-  // if (Validator.isEmpty(data.confirmPassword)) { 
-  //   errors.confirmPassword = 'Password is required'
-  // }
-  // if (!Validator.equals(data.password, data.confirmPassword)) { 
-  //   errors.confirmPassword = 'The passwords must match' 
-  // }
+  if (Validator.isEmpty(data.confirmPassword)) { 
+    errors.confirmPassword = 'Password is required'
+  }
+  if (!Validator.equals(data.password, data.confirmPassword)) { 
+    errors.confirmPassword = 'The passwords must match' 
+  }
   if (Validator.isEmpty(data.email)) { 
     errors.email = 'An email is required' 
   }

@@ -1,12 +1,8 @@
 import * as React from 'react';
-import { withStyles, WithStyles, Paper, Typography, Card, CardHeader, IconButton, CardContent, CardActions, FormControlLabel, Switch, CardMedia, Grid, ButtonBase } from '@material-ui/core';
+import { withStyles, WithStyles, Typography, Card, CardHeader, IconButton, CardContent, CardActions, FormControlLabel, Switch, CardMedia, Grid, ButtonBase, List, ListItem, ListItemText } from '@material-ui/core';
 import styles from './styles'; 
-
-// import imgList from '../../options';
-
+import classNames from 'classnames';
 import { LocationOn, Favorite, Share } from '@material-ui/icons';
-import AttachMoney from '@material-ui/icons/AttachMoney';
-import Star from '@material-ui/icons/Star';
 
 interface OwnProps {
     cardHeaderTitle: string;
@@ -14,43 +10,32 @@ interface OwnProps {
     price: string;
     rating: number;
     location: string;
+    attendBar: any;
+    loveBar: any;
 }
 interface State {
     location: string;
     cardHeaderTitle: string;
     cardHeaderSubheader: string;
     cardMediaImage: string;
-    price: string[];
-    rating: number[];
     isAttending: boolean;
+    isLoving: boolean;
 }
 
-interface State {
-    location: string;
-    cardHeaderTitle: string;
-    cardHeaderSubheader: string;
-    cardMediaImage: string;
-    price: string[];
-    rating: number[];
-    isAttending: boolean;
-}
+type Props = OwnProps & WithStyles<typeof styles>
 
-type Props = OwnProps & WithStyles
-
-// const EventCard: React.SFC<Props> = (props) => {
 class EventCard extends React.Component<Props, State> {
     
     constructor(props: Props) {
         super(props);
 
         this.state = {
-            location: "3 rue des lilas, 75001 Paris",
-            cardHeaderTitle: "Super cool bar in the CBD",
+            location: "",
+            cardHeaderTitle: "",
             cardHeaderSubheader: "",
             cardMediaImage: "",
-            price: ['$'],
-            rating: [1],
-            isAttending: false
+            isAttending: false,
+            isLoving: false,
         }
     }
     
@@ -64,8 +49,6 @@ class EventCard extends React.Component<Props, State> {
             <Grid item>
             <Typography component="p">
                 {this.props.price}
-                {/* below iteration with mockup data */}
-                {/* {this.state.price.map( (price, idx) => <AttachMoney /> )} */}
             </Typography>
             </Grid>
         </Grid>
@@ -81,8 +64,6 @@ class EventCard extends React.Component<Props, State> {
             <Grid item>
             <Typography component="p">
                 {this.props.rating}
-                {/* below iteration with mockup data */}
-                {/* {this.state.rating.map( (star, idx) => <Star /> )} */}
             </Typography>
             </Grid>
         </Grid>
@@ -95,28 +76,44 @@ class EventCard extends React.Component<Props, State> {
         </Grid>
     )
 
+    private handleOnChangeLove = () => {
+        this.setState( prevState => {
+            return { 
+                isLoving: !prevState.isLoving 
+            }
+        }, 
+            () => { this.props.loveBar(this.props.cardHeaderTitle, this.state.isLoving) }
+        )
+    }
+
+    private handleOnChangeAttendance = () => {
+        this.setState( prevState => {
+            return { 
+                isAttending: !prevState.isAttending 
+            }
+        }, 
+            () => { this.props.attendBar(this.props.cardHeaderTitle, this.state.isAttending) }
+        )
+    }
+
     render() {
         const { classes } = this.props;
-        const { cardHeaderTitle, image, price, rating, /*, cardHeaderSubheader, cardMediaImage, price, rating, location*/ } = this.props;
+        const { isLoving } = this.state;
+        const { cardHeaderTitle, image } = this.props;
+        const location = Array.from(this.props.location);
 
         return (
             <React.Fragment>
                 <Card className={classes.root}> 
-                    <Typography noWrap={false}>
+                    {/* <Typography noWrap={false}> */}
                         <CardHeader
-                            action={
-                                <IconButton>
-                                
-                                </IconButton>
-                            }
                             title={cardHeaderTitle}
-                            // subheader="September 14, 2018"
                         />
-                    </Typography>
+                    {/* </Typography> */}
 
                     <CardMedia
-                        style={{height: 0, paddingTop: '56.25%'}}
-                        image= {image}/*{imgList[0].img}*/
+                        // style={{height: 0, paddingTop: '56.25%'}}
+                        image={image}
                         className={classes.media}
                         title="Bar pic"
                     />
@@ -124,7 +121,18 @@ class EventCard extends React.Component<Props, State> {
                     <CardContent>
                         <Grid container direction="row" justify="center" alignItems="center" wrap="nowrap" className={classes.location}>
                             <LocationOn />
-                            {this.props.location}
+                            <List>
+                                <ListItem>
+                                    <ListItemText
+                                        primary={location.slice(0, -2).toString()}
+                                    />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText
+                                        primary={location[location.length-2]}
+                                    />
+                                </ListItem>
+                            </List>
                         </Grid>
                         <Grid container direction="row" justify="space-between" alignItems="center" wrap="nowrap">
                             {this.renderPriceRange()}
@@ -132,25 +140,20 @@ class EventCard extends React.Component<Props, State> {
                         </Grid>
                     </CardContent>
 
-                    <CardActions className={classes.actions} disableActionSpacing>
+                    <CardActions disableActionSpacing>
                         <Grid container direction="row" justify="space-between" alignItems="center">
-                            <IconButton aria-label="Add to favorites">
-                                <Favorite />
-                            </IconButton>
-                            <IconButton aria-label="Share">
-                                <Share />
+                            <IconButton aria-label="Add to favorites" onClick={this.handleOnChangeLove}>
+                                <Favorite color='action' className={classNames(isLoving && classNames(classes.faviconisactive))} />
                             </IconButton>
                             <FormControlLabel
                                 control={
                                     <Switch
-                                    // checked={this.state.checkedB}
-                                    // onChange={this.handleChange('checkedB')}
-                                    value={this.state.isAttending} // "checkedB"
+                                    value={this.state.isAttending}
                                     color="primary"
                                     />
                                 }
-                                label= "I'm going"// {this.state.isAttending ? "I'm Going" : "I'm not Going"}
-                                onChange={() => {this.setState({isAttending: !this.state.isAttending})}}
+                                label= "I'm going"
+                                onChange={this.handleOnChangeAttendance}
                             />
                         </Grid>
                     </CardActions>

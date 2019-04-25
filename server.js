@@ -11,12 +11,8 @@ var compression = require('compression');
 var morgan = require('morgan');
 var cors = require('cors');
 var helmet = require('helmet');
-// var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var fallback = require('express-history-api-fallback');
-var csp = require('helmet-csp');
-// var User = require('./models/users');
-// var { NODE_ENV, PORT, MONGODB_URL } = require('./.env');
 var authRoutes = require('./APIserver/routes/auth-routes');
 
 // MongoDB config
@@ -54,28 +50,19 @@ const NODE_ENV = process.env.NODE_ENV || 'production';
 if (NODE_ENV === 'development') {
   // use morgan to log requests to the console
   app.use(morgan('dev'));
-
-//   app.use(require('webpack-dev-middleware')(compiler, {
-//     noInfo: true,
-//     publicPath: webpackConfig.output.publicPath,
-//   }));
-
-//   app.use(require('webpack-hot-middleware')(compiler));
 } else {
   app.use(compression());
 }
 
 app.use(express.static('dist/client'));
 
-app.get('/', function(req, res, next) {
-  res.send('testing root path')
-})
+// app.use(function(req, res, next) {
+//   if (!req.headers.authorization) {
+//     return res.status(403).json({ error: 'No credentials sent!' });
+//   }
+//   next();
+// });
 
-// connect authentication routes
-app.get("/signup", function(req, res){
-  console.log("kikoo lol signup");
-  next();
-})
 app.use("/api", authRoutes);
 
 app.use(fallback(path.join(__dirname, '../../dist/client/index.html')));

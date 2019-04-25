@@ -44,7 +44,8 @@ const mapStateToProps = (state: AuthState, props: OwnProps): AuthStateProps => {
   return {
     isAuthenticated: state.authReducer.isAuthenticated,
     isFetching: state.authReducer.isFetching,
-    user: state.authReducer.user
+    user: state.authReducer.user,
+    error: state.authReducer.error
   };
 };
 

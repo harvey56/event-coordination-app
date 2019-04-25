@@ -10,7 +10,9 @@ import {
   ListItem, 
   ListItemIcon, 
   ListItemText, 
-  MenuItem 
+  MenuItem, 
+  Paper,
+  MenuList
 } from '@material-ui/core';
 import Card from '../Card/Card';
 import styles from './styles'; 
@@ -99,54 +101,51 @@ class ShowGridList extends React.Component<Props, State> {
               </GridList>
             </Grid>
             <Grid item xs={2} className={classes.gridListNoTiles}>
-                <GridList cols={1} >
-                  <GridListTile>
-                    <MenuItem>
-                      <ListItemIcon>
-                        <AccessibleForward />
-                      </ListItemIcon>
-                      <Typography variant='h6' gutterBottom>
-                        Bars I'm going to:
-                      </Typography>
-                    </MenuItem> 
+              <Paper className={classes.paper}>
+                <MenuList>
+                  <MenuItem className={classes.menuItem} disabled>
+                    <ListItemIcon className={classes.icon}>
+                      <AccessibleForward />
+                    </ListItemIcon>
+                    <ListItemText classes={{ primary: classes.primary }} inset primary="Bars I'm going to:" />
+                  </MenuItem>
+                </MenuList>
 
-                    <div className={classes.demo}>
-                      <List dense={true}>
-                        {barsImGoingTo.map( el => (
-                          <ListItem key={el}>
-                            <ListItemIcon>
-                              <CheckCircleOutline />
-                            </ListItemIcon>
-                            <ListItemText primary={el} />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </div>
-                  </GridListTile>
+                <div className={classes.demo}>
+                  <List dense={true}>
+                    {barsImGoingTo.map( el => (
+                      <ListItem key={el}>
+                        <ListItemIcon>
+                          <CheckCircleOutline />
+                        </ListItemIcon>
+                        <ListItemText primary={el} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </div>
+
+                <MenuList>
+                  <MenuItem className={classes.menuItem} disabled>
+                    <ListItemIcon className={classes.icon}>
+                      <Favorite />
+                    </ListItemIcon>
+                    <ListItemText classes={{ primary: classes.primary }} inset primary="Bars I love:" />
+                  </MenuItem>
+                </MenuList>
                   
-                  <GridListTile>
-                    <MenuItem className={classes.menuitem}>
-                      <ListItemIcon>
-                        <Favorite />
-                      </ListItemIcon>
-                      <Typography variant='h6' gutterBottom>
-                        Bars I love:
-                      </Typography>
-                    </MenuItem>                  
-                    <div className={classes.demo}>
-                      <List dense={true}>
-                        {barsILove.map( el => (
-                          <ListItem key={el}>
-                            <ListItemIcon>
-                              <CheckCircleOutline />
-                            </ListItemIcon>
-                            <ListItemText primary={el} />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </div>
-                  </GridListTile>
-                </GridList>
+                <div className={classes.demo}>
+                  <List dense={true}>
+                    {barsILove.map( el => (
+                      <ListItem key={el}>
+                        <ListItemIcon>
+                          <CheckCircleOutline />
+                        </ListItemIcon>
+                        <ListItemText primary={el} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </div>
+              </Paper>
             </Grid>
           </Grid>
       )

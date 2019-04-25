@@ -49,3 +49,11 @@ export function logoutApi() {
   localStorage.removeItem("jwtToken");
   setAuthToken("");
 }
+
+export function saveBarsList(barsImGoingto: object, barsILove: object) {
+  return axios.post('/api/savebars', {barsImGoingto: barsImGoingto, barsILove: barsILove})
+  .then((res) => {
+    console.log("list of bars has been saved")
+  })
+  .catch((error) => { throw error })
+}
