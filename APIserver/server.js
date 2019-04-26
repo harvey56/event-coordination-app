@@ -13,7 +13,7 @@ var cors = require('cors');
 var helmet = require('helmet');
 var jwt = require('jsonwebtoken');
 var fallback = require('express-history-api-fallback');
-var authRoutes = require('./APIserver/routes/auth-routes');
+var authRoutes = require('./routes/auth-routes');
 
 // MongoDB config
 const url = process.env.MONGODB_URL;
@@ -30,18 +30,10 @@ const app = express();
 app.use(cors());
 app.use(helmet());
 
-// app.use(helmet.contentSecurityPolicy({
-//   directives: {
-//     defaultSrc: ["'self'"],
-//     connectSrc: ["'self'" ,"http://localhost:8080"],
-//     scriptSrc: ["'self'","'unsafe-inline'","'unsafe-eval'"]
-//   }
-// }));
 // use body parser so we can get info from POST and/or URL parameters
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// const compiler = webpack(webpackConfig);
 app.use(morgan('dev'));
 
 const PORT = process.env.PORT || 5000;
